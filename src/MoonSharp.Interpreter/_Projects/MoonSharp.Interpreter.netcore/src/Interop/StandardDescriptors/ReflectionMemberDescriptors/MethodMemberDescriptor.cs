@@ -202,10 +202,37 @@ namespace MoonSharp.Interpreter.Interop
 			}
 			else
 			{
+				MethodInfo methodInfo = this.MethodInfo as MethodInfo;
+				Type attType = typeof(AsyncStateMachineAttribute);
+				var attrib = (AsyncStateMachineAttribute)methodInfo.GetCustomAttribute(attType);
+
 				if (IsConstructor)
+				{
 					retv = ((ConstructorInfo)MethodInfo).Invoke(pars);
+				}
+
+				else if (attrib != null)
+				{
+					dynamic task = MethodInfo.Invoke(obj, pars);
+					if (task.GetType().IsGenericType)
+					{
+						try
+						{
+							task.Wait();
+							retv = task.Result;
+
+						}
+						catch (Exception ex)
+						{
+							retv = DynValue.Void;
+						}
+					}
+
+				}
 				else
+				{
 					retv = MethodInfo.Invoke(obj, pars);
+				}
 			}
 
 			return BuildReturnValue(script, outParams, pars, retv);
@@ -259,11 +286,19 @@ namespace MoonSharp.Interpreter.Interop
 					fn = Expression.Call(inst, methodInfo, args);
 				}
 
+				//判断为async方法
+				Type attType = typeof(AsyncStateMachineAttribute);
+				var attrib = (AsyncStateMachineAttribute)methodInfo.GetCustomAttribute(attType);
 
 				if (this.m_IsAction)
 				{
 					var lambda = Expression.Lambda<Action<object, object[]>>(fn, objinst, ep);
 					Interlocked.Exchange(ref m_OptimizedAction, lambda.Compile());
+				}
+				else if (attrib != null)
+				{
+					var fnc = Expression.Convert(fn, typeof(object));
+					
 				}
 				else
 				{

@@ -147,7 +147,86 @@ namespace MoonSharp.Interpreter.Interop.Converters
 			var enumerator = EnumerationToDynValue(script, obj);
 			if (enumerator != null) return enumerator;
 
+			//元组判断
+			if (obj is Tuple<object>)
+			{
+				var tuple = (Tuple<object>)obj;
+				return DynValue.NewTuple(new DynValue[]
+				{
+					TryObjectToTrivialDynValue(null,tuple.Item1)
+				});
+			}
+			else if (obj is Tuple<object, object>)
+			{
+				var tuple = (Tuple<object, object>)obj;
+				return DynValue.NewTuple(new DynValue[]
+				{
+					TryObjectToTrivialDynValue(null,tuple.Item1),
+					TryObjectToTrivialDynValue(null,tuple.Item2)
+				});
+			}
+			else if (obj is Tuple<object, object, object>)
+			{
+				var tuple = (Tuple<object, object, object>)obj;
+				return DynValue.NewTuple(new DynValue[]
+				{
+					TryObjectToTrivialDynValue(null,tuple.Item1),
+					TryObjectToTrivialDynValue(null,tuple.Item2),
+					TryObjectToTrivialDynValue(null,tuple.Item3)
+				});
+			}
 
+			else if (obj is Tuple<object, object, object, object>)
+			{
+				var tuple = (Tuple<object, object, object, object>)obj;
+				return DynValue.NewTuple(new DynValue[]
+				{
+					TryObjectToTrivialDynValue(null,tuple.Item1),
+					TryObjectToTrivialDynValue(null,tuple.Item2),
+					TryObjectToTrivialDynValue(null,tuple.Item3),
+					TryObjectToTrivialDynValue(null,tuple.Item4)
+				});
+			}
+			else if (obj is Tuple<object, object, object, object, object>)
+			{
+				var tuple = (Tuple<object, object, object, object, object>)obj;
+				return DynValue.NewTuple(new DynValue[]
+				{
+					TryObjectToTrivialDynValue(null,tuple.Item1),
+					TryObjectToTrivialDynValue(null,tuple.Item2),
+					TryObjectToTrivialDynValue(null,tuple.Item3),
+					TryObjectToTrivialDynValue(null,tuple.Item4),
+					TryObjectToTrivialDynValue(null,tuple.Item5)
+				});
+			}
+			else if (obj is Tuple<object, object, object, object, object, object>)
+			{
+				var tuple = (Tuple<object, object, object, object, object, object>)obj;
+				return DynValue.NewTuple(new DynValue[]
+				{
+					TryObjectToTrivialDynValue(null,tuple.Item1),
+					TryObjectToTrivialDynValue(null,tuple.Item2),
+					TryObjectToTrivialDynValue(null,tuple.Item3),
+					TryObjectToTrivialDynValue(null,tuple.Item4),
+					TryObjectToTrivialDynValue(null,tuple.Item5),
+					TryObjectToTrivialDynValue(null,tuple.Item6)
+				});
+
+			}
+			else if (obj is Tuple<object, object, object, object, object, object, object>)
+			{
+				var tuple = (Tuple<object, object, object, object, object, object, object>)obj;
+				return DynValue.NewTuple(new DynValue[]
+				{
+					TryObjectToTrivialDynValue(null,tuple.Item1),
+					TryObjectToTrivialDynValue(null,tuple.Item2),
+					TryObjectToTrivialDynValue(null,tuple.Item3),
+					TryObjectToTrivialDynValue(null,tuple.Item4),
+					TryObjectToTrivialDynValue(null,tuple.Item5),
+					TryObjectToTrivialDynValue(null,tuple.Item6),
+					TryObjectToTrivialDynValue(null,tuple.Item7)
+				});
+			}
 			throw ScriptRuntimeException.ConvertObjectFailed(obj);
 		}
 
